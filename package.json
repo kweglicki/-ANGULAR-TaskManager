@@ -1,0 +1,43 @@
+{
+  "name": "taskmanager",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.7.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve -o",
+    "build": "ng build",
+    "preview": "npx http-server -p 4200 dist/taskmanager/browser",
+    "test": "ng test",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit"
+  },
+  "dependencies": {
+    "@angular/animations": "^18.2.0",
+    "@angular/cdk": "^18.2.0",
+    "@angular/common": "^18.2.0",
+    "@angular/compiler": "^18.2.0",
+    "@angular/core": "^18.2.0",
+    "@angular/forms": "^18.2.0",
+    "@angular/platform-browser": "^18.2.0",
+    "@angular/platform-browser-dynamic": "^18.2.0",
+    "@angular/router": "^18.2.0",
+    "@angular/service-worker": "^18.2.0",
+    "@ngx-translate/core": "^16.0.3",
+    "@ngx-translate/http-loader": "^8.0.0",
+    "dexie": "^4.0.8",
+    "rxjs": "^7.8.1",
+    "tslib": "^2.6.2",
+    "zod": "^3.23.8",
+    "zone.js": "^0.14.10"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.2.21",
+    "@angular/cli": "^18.2.21",
+    "@angular/compiler-cli": "^18.2.0",
+    "@types/node": "^20.12.12",
+    "eslint": "^9.7.0",
+    "eslint-plugin-import": "^2.29.1",
+    "typescript": "~5.5.4"
+  }
+}

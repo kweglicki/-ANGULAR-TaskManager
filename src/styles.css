@@ -1,0 +1,20 @@
+:root{
+  --bg:#0b1020;--panel:#0f172a;--muted:#94a3b8;--text:#e2e8f0;--accent:#22c55e;--danger:#ef4444;--card:#111827;--border:#1f2937
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+button{cursor:pointer}
+.container{max-width:1200px;margin:0 auto;padding:16px}
+.toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:12px;background:var(--panel);position:sticky;top:0;border-bottom:1px solid var(--border);z-index:5}
+.cols{display:flex;flex-direction: column;gap:16px;align-items:flex-start;overflow:auto;padding:16px}
+.col{min-width:280px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px}
+.col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.card{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--card);margin-bottom:8px}
+.card small{color:var(--muted)}
+.input, .select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:#0b1328;color:var(--text)}
+.primary{background:var(--accent);color:#052e16;border:none;padding:8px 12px;border-radius:10px}
+.ghost{background:transparent;border:1px solid var(--border);color:var(--text);border-radius:10px;padding:8px 12px}
+.danger{background:var(--danger);border:none;color:#fff;border-radius:10px;padding:8px 12px}
+.badge{display: flex; align-items: center; font-size:.75rem;color:#111;background:var(--accent);padding:2px 8px;border-radius:999px}
+hr{border:none;border-top:1px solid var(--border);margin:8px 0}

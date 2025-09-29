@@ -1,0 +1,16 @@
+{
+  "lang": { "label": "Language" },
+  "board": {
+    "addColumn": "Add column",
+    "addTask": "Add task",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "dialog": {
+    "title": "New task",
+    "fields": { "title": "Title", "desc": "Description", "priority": "Priority", "tags": "Tags" },
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "priority": { "low": "low", "medium": "medium", "high": "high" }
+}

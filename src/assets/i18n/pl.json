@@ -1,0 +1,16 @@
+{
+  "lang": { "label": "Język" },
+  "board": {
+    "addColumn": "Dodaj kolumnę",
+    "addTask": "Dodaj zadanie",
+    "edit": "Edytuj",
+    "delete": "Usuń"
+  },
+  "dialog": {
+    "title": "Nowe zadanie",
+    "fields": { "title": "Tytuł", "desc": "Opis", "priority": "Priorytet", "tags": "Tagi" },
+    "cancel": "Anuluj",
+    "save": "Zapisz"
+  },
+  "priority": { "low": "niski", "medium": "średni", "high": "wysoki" }
+}
