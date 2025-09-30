@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Column, Task } from '../../domain/types';
 import { BoardStore } from '../../state/board.store';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { CdkDropList, CdkDrag, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import type { CdkDrag as _CdkDrag, CdkDropList as _CdkDropList} from '@angular/cdk/drag-drop'; 
 import { TaskCardComponent } from './task-card.component';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -13,22 +14,28 @@ import { TranslatePipe } from '@ngx-translate/core';
   template: `
     <div>
       <div class="col-header">
-        <input id="col-name-{{column.id}}" name="col-name-{{column.id}}" class="input" [value]="column.name" (change)="rename(($any($event.target)).value)" aria-label="Column name"/>
-        <div style="display:flex;gap:6px">
+        <input id="col-name-{{column.id}}" name="col-name-{{column.id}}" class="input"
+           [value]="column.name" (change)="rename(($any($event.target)).value)"
+           aria-label="Column name"/>
+          <div style="display:flex;gap:6px">
           <span class="badge">{{ tasks.length }}</span>
           <button class="primary" (click)="addTask.emit()">{{ 'board.addTask' | translate }}</button>
           <button class="danger" (click)="removeColumn.emit()">{{ 'board.delete' | translate }}</button>
         </div>
       </div>
-      <div cdkDropList [cdkDropListData]="tasks" (cdkDropListDropped)="drop($event)" aria-label="Task list">
-        <app-task-card *ngFor="let t of tasks; trackBy: trackTask" cdkDrag [task]="t"
-                       (remove)="removeTask(t.id)" (edit)="editTask($event)"></app-task-card>
+      <div cdkDropList [id]="'list-'+column.id"
+          [cdkDropListConnectedTo]="connectedIds"
+          [cdkDropListData]="tasks"
+          (cdkDropListDropped)="drop($event)" aria-label="Task list">
+        <app-task-card *ngFor="let t of tasks; trackBy: trackTask" cdkDrag [cdkDragData]="t" [task]="t"
+                 (remove)="removeTask(t.id)" (edit)="editTask($event)"></app-task-card>
       </div>
     </div>
   `
 })
 export class ColumnComponent {
   @Input({ required: true }) column!: Column;
+  @Input() connectedIds: string[] = [];
   @Output() addTask = new EventEmitter<void>();
   @Output() removeColumn = new EventEmitter<void>();
   @Output() renameColumn = new EventEmitter<string>();
@@ -47,14 +54,16 @@ export class ColumnComponent {
       this.reindexLocal(ev.container.data);
       this.taskDropped.emit({ id: ev.container.data[ev.currentIndex].id, fromColumnId: this.column.id, toIndex: ev.currentIndex });
     } else {
-      const prev = ev.previousContainer.data, curr = ev.container.data;
-      transferArrayItem(prev, curr, ev.previousIndex, ev.currentIndex);
-      this.reindexLocal(prev); this.reindexLocal(curr);
-      this.taskDropped.emit({ id: curr[ev.currentIndex].id, fromColumnId: (ev.previousContainer.data[ev.previousIndex]?.columnId) ?? this.column.id, toIndex: ev.currentIndex });
+      const dragged = ev.item.data as Task;
+      const fromColumnId = dragged.columnId;
+      transferArrayItem(ev.previousContainer.data, ev.container.data, ev.previousIndex, ev.currentIndex);
+      this.reindexLocal(ev.previousContainer.data);
+      this.reindexLocal(ev.container.data);
+      this.taskDropped.emit({ id: dragged.id, fromColumnId, toIndex: ev.currentIndex });
     }
   }
 
-  private reindexLocal(list: Task[]) { list.forEach((t, i) => (t.index = i)); } // dlaczego: optyczna responsywność UI
+  private reindexLocal(list: Task[]) { list.forEach((t, i) => (t.index = i)); } 
 
   removeTask(id: string) { this.store.removeTask(id); }
   editTask(task: Task) {
