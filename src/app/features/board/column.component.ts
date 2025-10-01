@@ -27,8 +27,8 @@ import { TranslatePipe } from '@ngx-translate/core';
           [cdkDropListConnectedTo]="connectedIds"
           [cdkDropListData]="tasks"
           (cdkDropListDropped)="drop($event)" aria-label="Task list">
-        <app-task-card *ngFor="let t of tasks; trackBy: trackTask" cdkDrag [cdkDragData]="t" [task]="t"
-                 (remove)="removeTask(t.id)" (edit)="editTask($event)"></app-task-card>
+          <app-task-card *ngFor="let t of tasks; trackBy: trackTask" cdkDrag [cdkDragData]="t" [task]="t"
+                (remove)="removeTask(t.id)" (edit)="requestEdit.emit($event)"></app-task-card>
       </div>
     </div>
   `
@@ -36,6 +36,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class ColumnComponent {
   @Input({ required: true }) column!: Column;
   @Input() connectedIds: string[] = [];
+  @Output() requestEdit = new EventEmitter<Task>();
   @Output() addTask = new EventEmitter<void>();
   @Output() removeColumn = new EventEmitter<void>();
   @Output() renameColumn = new EventEmitter<string>();
@@ -66,9 +67,4 @@ export class ColumnComponent {
   private reindexLocal(list: Task[]) { list.forEach((t, i) => (t.index = i)); } 
 
   removeTask(id: string) { this.store.removeTask(id); }
-  editTask(task: Task) {
-    const title = prompt('Title', task.title);
-    if (!title) return;
-    this.store.editTask({ ...task, title });
-  }
 }

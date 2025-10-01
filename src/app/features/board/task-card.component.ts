@@ -14,11 +14,12 @@ import { TranslatePipe } from '@ngx-translate/core';
           <strong id="{{'t-' + task.id}}">{{ task.title }}</strong>
           <div *ngIf="task.tags?.length"><small># {{ task.tags.join(', ') }}</small></div>
         </div>
-        <span class="badge">{{ task.priority }}</span>
+        <span class="badge">{{ task.priority | translate }}</span>
       </div>
       <p *ngIf="task.description">{{ task.description }}</p>
       <div style="display:flex;gap:6px;justify-content:flex-end">
-        <button class="ghost" (click)="edit.emit(task)">{{ 'board.edit' | translate }}</button>
+        <button class="ghost" (click)="edit.emit(task)">{{'board.edit' | translate }}
+        </button>
         <button class="danger" (click)="remove.emit(task.id)">{{ 'board.delete' | translate }}</button>
       </div>
     </div>

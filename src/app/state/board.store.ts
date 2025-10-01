@@ -93,11 +93,11 @@ export class BoardStore {
     const topIndex = (this.tasks().filter(t => t.columnId === columnId).sort((a, b) => b.index - a.index)[0]?.index ?? -1) + 1;
     const task: Task = {
       id: uid(), title: input.title, description: input.description ?? '', columnId, index: topIndex,
-      tags: input.tags ?? [], priority: input.priority ?? 'medium', createdAt: now(), updatedAt: now()
+      tags: input.tags ?? [], priority: input.priority ?? 'medium', createdAt: now(), updatedAt: now(), mode: 'create'
     };
     this.commit([{ t: 'addTask', task }]);
   }
-  editTask(task: Task) { this.commit([{ t: 'editTask', task: { ...task, updatedAt: now() } }]); }
+  editTask(task: Task) { this.commit([{ t: 'editTask', task: { ...task, updatedAt: now(), mode: 'edit' } }]); }
   removeTask(id: ID) { this.commit([{ t: 'removeTask', id }]); }
   moveTask(id: ID, toColumnId: ID, toIndex: number) { this.commit([{ t: 'moveTask', id, toColumnId, toIndex }]); }
   reorderColumns(idsInOrder: ID[]) {

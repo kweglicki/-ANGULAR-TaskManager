@@ -8,9 +8,11 @@
   },
   "dialog": {
     "title": "New task",
-    "fields": { "title": "Title", "desc": "Description", "priority": "Priority", "tags": "Tags" },
+    "editTitle": "Edit task",
+    "fields": { "title": "Title", "desc": "Description", "priority": "Priority", "tags": "Tags", "moveTo": "Move to" },
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "fields.moveTo": "Move to"
   },
   "priority": { "low": "low", "medium": "medium", "high": "high" }
 }

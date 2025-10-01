@@ -23,7 +23,6 @@ export class CollabService {
         this.ws = new WebSocket(wsUrl);
         this.ws.onmessage = (ev) => this.handleIncoming(ev.data);
       } catch {
-        // ws jest opcjonalny
       }
     }
   }

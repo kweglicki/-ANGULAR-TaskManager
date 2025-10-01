@@ -16,6 +16,7 @@ export interface Task {
   updatedAt: number;
   tags: string[];
   priority: 'low' | 'medium' | 'high';
+  mode: 'edit' | 'create';
 }
 
 export type PatchOp =

@@ -8,7 +8,8 @@
   },
   "dialog": {
     "title": "Nowe zadanie",
-    "fields": { "title": "Tytuł", "desc": "Opis", "priority": "Priorytet", "tags": "Tagi" },
+    "editTitle": "Edytuj zadanie",
+    "fields": { "title": "Tytuł", "desc": "Opis", "priority": "Priorytet", "tags": "Tagi", "moveTo": "Przenieś do" },
     "cancel": "Anuluj",
     "save": "Zapisz"
   },

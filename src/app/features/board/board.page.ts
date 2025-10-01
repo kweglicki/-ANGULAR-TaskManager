@@ -6,6 +6,7 @@ import { TaskDialogComponent } from './task-dialog.component';
 import { CdkDropList, CdkDrag, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { TranslatePipe } from '@ngx-translate/core';
 import type { Column } from '../../domain/types';
+import { Task } from '../../domain/types';
 
 @Component({
   standalone: true,
@@ -24,19 +25,26 @@ import type { Column } from '../../domain/types';
               (addTask)="openDialog(col.id)"
               (removeColumn)="store.removeColumn(col.id)"
               (renameColumn)="store.renameColumn(col.id, $event)"
-              (taskDropped)="onTaskDrop($event, col.id)"></app-column>
+              (requestEdit)="openEditDialog($event)"></app-column>
         <div class="col" style="min-width:240px;display:flex;align-items:center;justify-content:center">
       <button class="ghost" (click)="addColumn()">{{ 'board.addColumn' | translate }}</button>
     </div>
   </div>
-      <app-task-dialog *ngIf="dialogOpen" [columnId]="dialogColId!" (close)="dialogOpen=false" (save)="saveTask($event)"></app-task-dialog>
-    </div>
+      <app-task-dialog *ngIf="dialogOpen"
+                  [mode]="dialogMode"
+                  [initial]="dialogTask"
+                  [columns]="store.columns()"
+                  [columnId]="dialogColId!"
+                  (close)="dialogOpen=false"
+                  (save)="saveTask($event)"></app-task-dialog>
   `
 })
 export class BoardPageComponent {
   store = inject(BoardStore);
   dialogOpen = false;
   dialogColId?: string;
+  dialogMode: 'create' | 'edit' = 'create';
+  dialogTask?: Task;
 
   colIds = computed(() => this.store.columns().map(c => c.id));
 
@@ -47,10 +55,36 @@ export class BoardPageComponent {
     if (name?.trim()) this.store.addColumn(name.trim());
   }
 
-  openDialog(colId: string) { this.dialogColId = colId; this.dialogOpen = true; }
-  saveTask(e: { columnId: string; title: string; description?: string; priority: 'low'|'medium'|'high'; tags: string[] }) {
-    this.store.addTask(e.columnId, e);
+  openDialog(colId: string) {
+    this.dialogMode = 'create';
+    this.dialogTask = undefined;
+    this.dialogColId = colId;
+    this.dialogOpen = true;
+  }
+  
+  saveTask(e: { id?: string; columnId: string; title: string; description?: string; priority: 'low'|'medium'|'high'; tags: string[] }) {
+    if (e.id && this.dialogTask) {
+      const current = this.dialogTask;
+      const updated: Task = {
+        ...current,
+        title: e.title.trim(),
+        description: e.description?.trim() ?? '',
+        priority: e.priority,
+        tags: e.tags
+      };
+      if (current.columnId !== e.columnId) {
+        const toIndex = (this.store.tasksByColumn()[e.columnId]?.length ?? 0);
+        this.store.moveTask(current.id, e.columnId, toIndex);
+        updated.columnId = e.columnId;
+        updated.index = toIndex;
+      }
+      this.store.editTask(updated);
+    } else {
+      this.store.addTask(e.columnId, e);
+    }
     this.dialogOpen = false;
+    this.dialogTask = undefined;
+    this.dialogMode = 'create';
   }
 
   onTaskDrop(e: { id: string; fromColumnId: string; toIndex: number }, toColumnId: string) {
@@ -67,5 +101,12 @@ export class BoardPageComponent {
   connectedIdsFor(colId: string): string[] {
     const all = this.store.columns().map(c => 'list-' + c.id);
     return all.filter(id => id !== 'list-' + colId);
+  }
+
+  openEditDialog(task: Task) {
+    this.dialogMode = 'edit';
+    this.dialogTask = task;
+    this.dialogColId = task.columnId;
+    this.dialogOpen = true;
   }
 }
